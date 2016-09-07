@@ -19,6 +19,7 @@ public class Board2 extends JPanel{
     private int boardsize;
     
     Tile myTiles[];
+    Integer[][] board;
     Integer[][] tmpBoard;
 	Integer reward;
 	private boolean myLose;
@@ -38,7 +39,7 @@ public class Board2 extends JPanel{
 		   myTiles[i] = new Tile(i,0);
 		 }
 		 
-		 tmpBoard = new Integer[boardsize][boardsize];
+		 board = new Integer[boardsize][boardsize];
 		 copyToTmpBoard();
 		 //Arrays.fill(tmpBoard, 0);
 		 //addTile();
@@ -100,8 +101,8 @@ public class Board2 extends JPanel{
 	      int y = (index2 - x) / boardsize;
 	      //emptyTime.value = Math.random() < 0.9 ? 2 : 4;
 	      //System.out.println("index: "+index+"x: "+x+"y: "+y);
-	      tmpBoard[x][y] = Math.random() < 0.9 ? 1 : 2;
-	      commit();
+	      board[x][y] = Math.random() < 0.9 ? 1 : 2;
+	      //commit();
 	    }
 	  }
 	
@@ -109,7 +110,7 @@ public class Board2 extends JPanel{
 	    final List<Integer> list = new ArrayList<Integer>();
 	    for (int x = 0; x < boardsize; x++) {
 			for (int y = 0; y < boardsize; y++) {
-				if (tmpBoard[x][y] == 0) {
+				if (board[x][y] == 0) {
 					list.add(x+y*boardsize);
 				}
 			}
@@ -121,26 +122,39 @@ public class Board2 extends JPanel{
 	    return availableSpace().size() == 0;
 	  }
 
-	  boolean canMove() {
+	private boolean canMove() {
 	    if (!isFull()) {
 	      return true;
 	    }
 	    for (int x = 0; x < 4; x++) {
 	      for (int y = 0; y < 4; y++) {
-	        Integer t = tmpBoard[x][y];
-	        if ((x < 3 && t == tmpBoard[x+1][y])
-	          || ((y < 3) && t == tmpBoard[x][y+1])) {
+	        Integer t = board[x][y];
+	        if ((x < 3 && t == board[x+1][y])
+	          || ((y < 3) && t == board[x][y+1])) {
 	          return true;
 	        }
 	      }
 	    }
 	    return false;
 	  }
+	  
+	private boolean isEqual(Integer[][] state0, Integer[][] state1){
+
+		for (int x = 0; x < 4; x++) {
+		      for (int y = 0; y < 4; y++) {
+		        if (state0[x][y]!=state1[x][y]) {
+		          return false;
+		        }
+		      }
+		    }
+		 return true;
+		
+	}
 	
 	
 	
 	public void evaluateAfterState(Integer action){
-		evaluateAfterState(tmpBoard,action);
+		evaluateAfterState(board,action);
 		
 	}
 	
@@ -150,7 +164,8 @@ public class Board2 extends JPanel{
 		 //Arrays.fill(result, 0);
 		 //copyToTmpBoard(state);
 		 reward=0;
-		 tmpBoard = state;
+		 board = state;
+		 tmpBoard = board;
 		 switch (action){
 		 
 		 	case 1:
@@ -170,15 +185,19 @@ public class Board2 extends JPanel{
 		 	break;
 		 
 		 }
-		 
-		addTile();
-
+		
+		
+		//if (!isEqual(board, tmpBoard)){
+		//	addTile();
+		//}
+	 	
+	 
 		myLose = !canMove();
 	    System.out.println("myLose:"+ myLose);
 	    System.out.println("reward:"+ reward);
 	    System.out.println("myScore:"+ myScore);
 
-		//commit();
+		commit();
 		return reward;		 
 	 }
 	 
@@ -192,8 +211,8 @@ public class Board2 extends JPanel{
 			int j = 0;
 			for (int k = 0; k < boardsize; k++) {
 
-				if (tmpBoard[k][i] != 0) {
-					result[j] = tmpBoard[k][i];
+				if (board[k][i] != 0) {
+					result[j] = board[k][i];
 					j++;
 				}
 
@@ -220,7 +239,7 @@ public class Board2 extends JPanel{
 
 			for (int k = 0; k < boardsize; k++) {
 
-				tmpBoard[k][i] = result[k];
+				board[k][i] = result[k];
 
 			}
 
@@ -228,8 +247,8 @@ public class Board2 extends JPanel{
 			int n = 0;
 			for (int k = 0; k < boardsize; k++) {
 
-				if (tmpBoard[k][i] != 0) {
-					result[n] = tmpBoard[k][i]; //tileAt(k, i, state).getValue();
+				if (board[k][i] != 0) {
+					result[n] = board[k][i]; //tileAt(k, i, state).getValue();
 					n++;
 				}
 
@@ -237,11 +256,10 @@ public class Board2 extends JPanel{
 
 			for (int k = 0; k < boardsize; k++) {
 
-				tmpBoard[k][i] = result[k];
+				board[k][i] = result[k];
 
 			}
 		}
-		//commit();
 		myScore += reward;
 		return result;
 	}
@@ -298,12 +316,12 @@ public class Board2 extends JPanel{
 			for (int y = 0; y < 4; y++) {
 				int newX = (x * cos) - (y * sin) + offsetX;
 				int newY = (x * sin) + (y * cos) + offsetY;
-				newTiles[newX][newY] = tmpBoard[x][y];
+				newTiles[newX][newY] = board[x][y];
 
 			}
 		}
 		
-		tmpBoard = newTiles;
+		board = newTiles;
 	}
 	
 	public ArrayList<Integer[][]> evaluateAfterAfterState(Integer[][] state){
@@ -338,14 +356,14 @@ public class Board2 extends JPanel{
 		for (int x = 0; x < boardsize; x++) {
 			for (int y = 0; y < boardsize; y++) {
 				
-				tmpBoard[x][y]=tileAt(x, y, state).getValue();
+				board[x][y]=tileAt(x, y, state).getValue();
 				
 			}
 		}
 		
 	}
 	
-	private void commit(){
+	public void commit(){
 		
 		commit(myTiles);
 	}
@@ -355,7 +373,7 @@ public class Board2 extends JPanel{
 		for (int x = 0; x < boardsize; x++) {
 			for (int y = 0; y < boardsize; y++) {
 				
-				tileAt(x, y, state).setValue(tmpBoard[x][y]); //value = tmpBoard[x][y];
+				tileAt(x, y, state).setValue(board[x][y]); //value = tmpBoard[x][y];
 				
 			}
 		}

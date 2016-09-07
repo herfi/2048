@@ -13,5 +13,7 @@ public class AIplayer {
 	public void play(){
 		board.addTile();
 		board.addTile();
+		board.commit();
+		
 	}
 }

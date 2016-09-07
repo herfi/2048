@@ -107,7 +107,7 @@ public class Gui {
 	    ActionListener al = new ActionListener() {
 	      @Override public void actionPerformed( ActionEvent e ) {
 	        board.addTile();
-	        //frame.repaint();
+	        frame.repaint();
 	      }
 	    };
 	    button1.addActionListener( al );
