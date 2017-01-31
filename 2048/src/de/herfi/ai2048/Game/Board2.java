@@ -102,7 +102,7 @@ public class Board2 extends JPanel{
 	      //emptyTime.value = Math.random() < 0.9 ? 2 : 4;
 	      //System.out.println("index: "+index+"x: "+x+"y: "+y);
 	      board[x][y] = Math.random() < 0.9 ? 1 : 2;
-	      //commit();
+	      commit();
 	    }
 	  }
 	
