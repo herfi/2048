@@ -187,9 +187,9 @@ public class Board2 extends JPanel{
 		 }
 		
 		
-		//if (!isEqual(board, tmpBoard)){
-		//	addTile();
-		//}
+		if (!isEqual(board, tmpBoard)){
+			addTile();
+		}
 	 	
 	 
 		myLose = !canMove();
