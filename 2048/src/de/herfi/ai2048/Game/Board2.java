@@ -20,7 +20,7 @@ public class Board2 extends JPanel{
     
     Tile myTiles[];
     Integer[][] board;
-    Integer[][] tmpBoard;
+    //Integer[][] tmpBoard;
 	Integer reward;
 	private boolean myLose;
 	private boolean myWin;
@@ -165,7 +165,7 @@ public class Board2 extends JPanel{
 		 //copyToTmpBoard(state);
 		 reward=0;
 		 board = state;
-		 tmpBoard = board;
+		 Integer[][] tmpBoard = board.clone();
 		 switch (action){
 		 
 		 	case 1:
@@ -186,9 +186,13 @@ public class Board2 extends JPanel{
 		 
 		 }
 		
-		
+		 System.out.println(!isEqual(board, tmpBoard)); 
+		 System.out.println(board);
+		 System.out.println(tmpBoard.toString());
 		if (!isEqual(board, tmpBoard)){
-			addTile();
+			
+			//addTile();
+			
 		}
 	 	
 	 
@@ -202,7 +206,7 @@ public class Board2 extends JPanel{
 	 }
 	 
 	public Integer[] left() {
-
+		
 		Integer[] result = new Integer[boardsize];
 		
 		
